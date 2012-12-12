@@ -16,12 +16,12 @@ make && make install
 
 ### function http_get($url, $timeout=1)
 - $url get请求的url
-- $timeout 请求执行的超时时间单位秒
+- $timeout 请求执行的超时时间单位秒(包括传输时间和连接时间)
 
 ### function http_post($url, $data, $timeout=1)
 - $url post请求的url
 - $data post参数，一个数组
-- $timeout 请求执行的超时时间单位秒
+- $timeout 请求执行的超时时间单位秒(包括传输时间和连接时间)
 
 ### function http_info()
 - 返回最近一次请求的错误信息

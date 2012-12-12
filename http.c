@@ -32,7 +32,7 @@
 static curl_item* items[ITEM_MAX];
 /* True global resources - no need for thread safety here */
 
-static CURLcode errno = 0;
+static CURLcode err = 0;
 static char * errstr = NULL;
 
 /* {{{ http_functions[]
@@ -249,13 +249,14 @@ PHP_FUNCTION(http_get)
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, timeout);
 
 
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &str);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_res);
 
-	errno = curl_easy_perform(curl);
-	if (errno != 0) RETURN_FALSE;
+	err = curl_easy_perform(curl);
+	if (err != 0) RETURN_FALSE;
 	RETURN_STRINGL(str.c, str.len, 0);
 }
 
@@ -278,6 +279,7 @@ PHP_FUNCTION(http_post)
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, timeout);
 
 	if (php_url_encode_hash_ex(HASH_OF(post), &formstr, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, PHP_QUERY_RFC1738 TSRMLS_CC) == FAILURE) {
         if (formstr.c) {
@@ -289,11 +291,11 @@ PHP_FUNCTION(http_post)
 
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &str);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_res);
-	errno = curl_easy_perform(curl); 
+	err = curl_easy_perform(curl); 
 	if (formstr.c) {
 		efree(formstr.c);
 	}
-	if (errno != 0){
+	if (err != 0){
 		 RETURN_FALSE;
 	}
 	RETURN_STRINGL(str.c, str.len, 0);
@@ -301,7 +303,7 @@ PHP_FUNCTION(http_post)
 
 PHP_FUNCTION(http_info)
 {
-	char * errstr = curl_easy_strerror(errno);
+	char * errstr = curl_easy_strerror(err);
 	RETURN_STRING(errstr, 1);
 }
 /* Remove the following function when you have succesfully modified config.m4
