@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("http", "for http support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("http", "enable http support", "no");
+
+if (PHP_HTTP != "no") {
+	EXTENSION("http", "http.c");
+}
+
