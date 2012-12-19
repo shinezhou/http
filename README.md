@@ -14,14 +14,14 @@ make && make install
 
 ## Api
 
-### function http_get($url, $timeout=1)
+### function http_get($url, $timeout=1000)
 - $url get请求的url
-- $timeout 请求执行的超时时间单位秒(包括传输时间和连接时间)
+- $timeout 请求执行的超时时间单位毫秒(包括传输时间和连接时间)
 
-### function http_post($url, $data, $timeout=1)
+### function http_post($url, $data, $timeout=1000)
 - $url post请求的url
 - $data post参数，一个数组
-- $timeout 请求执行的超时时间单位秒(包括传输时间和连接时间)
+- $timeout 请求执行的超时时间单位毫秒(包括传输时间和连接时间)
 
 ### function http_info()
 - 返回最近一次请求的错误信息

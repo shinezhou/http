@@ -235,7 +235,7 @@ PHP_FUNCTION(http_get)
 {
 	char *url;
 	uint url_len;
-	long timeout = 1;
+	long timeout = 1000;
 	CURL *curl = NULL;
 	smart_str  str = {0};
 
@@ -248,9 +248,9 @@ PHP_FUNCTION(http_get)
 	
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
-	curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
-	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, timeout);
-
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, timeout);
+	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, timeout);
 
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &str);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_res);
@@ -264,7 +264,7 @@ PHP_FUNCTION(http_post)
 {
 	char *url;
 	uint url_len;
-	long timeout = 1;
+	long timeout = 1000;
 	CURL *curl = NULL;
 	zval *post = NULL;
 	smart_str  str = {0};
@@ -278,8 +278,9 @@ PHP_FUNCTION(http_post)
 	if (curl == NULL) RETURN_FALSE;
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
-	curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
-	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, timeout);
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, timeout);
+	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, timeout);
 
 	if (php_url_encode_hash_ex(HASH_OF(post), &formstr, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, PHP_QUERY_RFC1738 TSRMLS_CC) == FAILURE) {
         if (formstr.c) {
