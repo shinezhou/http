@@ -202,6 +202,7 @@ static CURL* find(char *key, uint key_len) {
 			if (item->curl != NULL) {
 				curl_easy_setopt(item->curl, CURLOPT_HEADER, 0);
 				curl_easy_setopt(item->curl, CURLOPT_FOLLOWLOCATION, 1);
+				curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 				items[i] = item;
 				return item->curl;
 			}
@@ -249,7 +250,6 @@ PHP_FUNCTION(http_get)
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, timeout);
-	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, timeout);
 
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &str);
@@ -279,7 +279,6 @@ PHP_FUNCTION(http_post)
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, timeout);
-	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, timeout);
 
 	if (php_url_encode_hash_ex(HASH_OF(post), &formstr, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, PHP_QUERY_RFC1738 TSRMLS_CC) == FAILURE) {
